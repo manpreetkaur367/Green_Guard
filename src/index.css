@@ -1,0 +1,153 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import 'tailwindcss';
+
+@theme inline {
+  --font-sans: 'Inter', sans-serif;
+  --font-display: 'Plus Jakarta Sans', sans-serif;
+
+  --color-background: #f5f3ee;
+  --color-foreground: #1a2820;
+  --color-card: #ffffff;
+  --color-card-foreground: #1a2820;
+  --color-primary: #1e4d35;
+  --color-primary-foreground: #f5f3ee;
+  --color-secondary: #e3ede8;
+  --color-secondary-foreground: #1e4d35;
+  --color-muted: #e8e3da;
+  --color-muted-foreground: #677870;
+  --color-accent: #3d7a52;
+  --color-accent-foreground: #ffffff;
+  --color-border: #d2ccc0;
+  --color-ring: #1e4d35;
+
+  --color-forest-50: #f0f7f2;
+  --color-forest-100: #dceee2;
+  --color-forest-200: #b8ddc4;
+  --color-forest-300: #87c49e;
+  --color-forest-400: #54a674;
+  --color-forest-500: #3d7a52;
+  --color-forest-600: #2e6040;
+  --color-forest-700: #1e4d35;
+  --color-forest-800: #183d2a;
+  --color-forest-900: #112d1e;
+
+  --color-risk-high: #dc2626;
+  --color-risk-medium: #d97706;
+  --color-risk-low: #16a34a;
+}
+
+:root {
+  --greenguard-max-width: 1400px;
+  --greenguard-padding: clamp(1rem, 2vw, 2.5rem);
+}
+
+.content-shell {
+  width: 100%;
+  max-width: var(--greenguard-max-width);
+  margin-inline: auto;
+  padding-left: var(--greenguard-padding);
+  padding-right: var(--greenguard-padding);
+}
+
+@media (min-width: 1600px) {
+  :root {
+    --greenguard-max-width: 1500px;
+  }
+}
+
+@media (max-width: 1024px) {
+  :root {
+    --greenguard-padding: 1.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --greenguard-padding: 1rem;
+  }
+}
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: #f5f3ee;
+  color: #1a2820;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #d2ccc0 transparent;
+}
+
+*::-webkit-scrollbar { width: 5px; height: 5px; }
+*::-webkit-scrollbar-track { background: transparent; }
+*::-webkit-scrollbar-thumb { background-color: #d2ccc0; border-radius: 3px; }
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes floatReverse {
+  0%, 100% { transform: translateY(-5px); }
+  50% { transform: translateY(5px); }
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.2); }
+}
+
+@keyframes progressBar {
+  from { width: 0%; }
+  to { width: var(--target-width, 100%); }
+}
+
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in-up { animation: fadeInUp 0.7s ease-out forwards; }
+.animate-fade-in { animation: fadeIn 0.5s ease-out forwards; }
+.animate-float { animation: float 5s ease-in-out infinite; }
+.animate-float-reverse { animation: floatReverse 4s ease-in-out infinite; }
+.animate-pulse-dot { animation: pulse-dot 1.5s ease-in-out infinite; }
+.animate-spin-slow { animation: spin-slow 3s linear infinite; }
+
+.animate-delay-100 { animation-delay: 100ms; }
+.animate-delay-200 { animation-delay: 200ms; }
+.animate-delay-300 { animation-delay: 300ms; }
+.animate-delay-400 { animation-delay: 400ms; }
+.animate-delay-500 { animation-delay: 500ms; }
+.animate-delay-600 { animation-delay: 600ms; }
+.animate-delay-700 { animation-delay: 700ms; }
+
+.opacity-0-init { opacity: 0; }
+
+.skeleton {
+  background: linear-gradient(90deg, #e8e3da 25%, #f0ede6 50%, #e8e3da 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
