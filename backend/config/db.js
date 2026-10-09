@@ -1,25 +1,22 @@
 import mongoose from "mongoose";
 
 const connectDB = async () => {
-  const primaryMongoURI = process.env.MONGODB_URI || "mongodb://localhost:27017/greenguard";
-  const fallbackMongoURI = "mongodb://localhost:27017/greenguard";
-  const candidateURIs = [...new Set([primaryMongoURI, fallbackMongoURI])];
-
-  let lastError = null;
-
-  for (const mongoURI of candidateURIs) {
-    try {
-      await mongoose.connect(mongoURI, { serverSelectionTimeoutMS: 5000 });
-      console.log(`MongoDB connected successfully using ${mongoURI}`);
-      return;
-    } catch (error) {
-      lastError = error;
-      console.warn(`MongoDB connection failed for ${mongoURI}: ${error.message}`);
-    }
+  if (mongoose.connection.readyState === 1) {
+    return;
   }
 
-  console.error("MongoDB connection failed for all configured URIs.");
-  throw lastError || new Error("MongoDB connection failed.");
+  const mongoURI = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/greenguard";
+
+  try {
+    await mongoose.connect(mongoURI, { serverSelectionTimeoutMS: 5000 });
+    console.log("MongoDB connected successfully.");
+    mongoose.connection.on("error", (error) => {
+      console.error("MongoDB connection error:", error.message);
+    });
+  } catch (error) {
+    console.error("MongoDB connection failed:", error.message);
+    throw error;
+  }
 };
 
 export default connectDB;

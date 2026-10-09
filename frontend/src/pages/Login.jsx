@@ -1,5 +1,6 @@
 import { useState, useContext } from "react";
 import { useRouter, AuthContext } from "../App";
+import { buildApiUrl } from "../services/api";
 
 export default function Login({ mode = "login" }) {
   const { navigate } = useRouter();
@@ -27,7 +28,7 @@ export default function Login({ mode = "login" }) {
 
       setLoading(true);
       try {
-        const res = await fetch("/api/auth/forgot-password", {
+        const res = await fetch(buildApiUrl("/auth/forgot-password"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ email: form.email }),
@@ -88,7 +89,7 @@ export default function Login({ mode = "login" }) {
 
     try {
       if (isRegister) {
-        const res = await fetch("/api/auth/register", {
+        const res = await fetch(buildApiUrl("/auth/register"), {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ name: form.name, email: form.email, password: form.password }),
@@ -107,7 +108,7 @@ export default function Login({ mode = "login" }) {
         return;
       }
 
-      const res = await fetch("/api/auth/login", {
+      const res = await fetch(buildApiUrl("/auth/login"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email: form.email, password: form.password }),

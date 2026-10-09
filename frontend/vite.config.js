@@ -13,7 +13,7 @@ export default ({ mode }) => {
       host: '0.0.0.0',
       port: 4173,
       strictPort: true,
-      proxy: { '/api': { target: 'http://localhost:8000', changeOrigin: true } },
+      proxy: { '/api': { target: 'http://localhost:8004', changeOrigin: true } },
     },
     preview: { host: '0.0.0.0', port: 4173 },
   }

@@ -1,3 +1,5 @@
+import { buildApiUrl } from "./api";
+
 async function extractImageGPS(file) {
   try {
     if (typeof EXIF !== "undefined") {
@@ -42,7 +44,7 @@ async function callDetectionApi(file) {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch("/api/detections/analyze", {
+  const response = await fetch(buildApiUrl("/detections/analyze"), {
     method: "POST",
     body: formData,
   });

@@ -1,6 +1,12 @@
 import axios from "axios";
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8000/api";
+export const buildApiUrl = (path = "") => {
+  const base = (import.meta.env.VITE_API_URL || "/api").replace(/\/+$/, "");
+  const normalizedPath = path.startsWith("/") ? path : `/${path}`;
+  return `${base}${normalizedPath}`;
+};
+
+const API_BASE_URL = buildApiUrl("");
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -26,7 +32,7 @@ export const authApi = {
 };
 
 export const detectionApi = {
-  analyze: (formData) => axios.post(`${API_BASE_URL}/detections/analyze`, formData, {
+  analyze: (formData) => axios.post(buildApiUrl("/detections/analyze"), formData, {
     headers: { "Content-Type": "multipart/form-data" },
   }),
   list: () => api.get("/detections"),

@@ -12,13 +12,34 @@ if (!process.env.MONGODB_URI && !process.env.JWT_SECRET) {
 }
 
 const app = express();
-const port = process.env.PORT || 8000;
+const port = process.env.PORT || 8004;
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:4173,http://localhost:5173,http://localhost:3000").split(",").map((origin) => origin.trim()).filter(Boolean);
 
-app.use(cors());
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".netlify.app")) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 await connectDB();
+
+app.get("/", (req, res) => {
+  res.json({
+    service: "GreenGuard API",
+    status: "ok",
+    message: "GreenGuard backend is running.",
+    endpoints: ["/api/health", "/api/auth", "/api/detections"],
+  });
+});
 
 app.use("/api/auth", authRoutes);
 app.use("/api/detections", detectionRoutes);
@@ -35,6 +56,16 @@ app.use((err, req, res, next) => {
   });
 });
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`GreenGuard server running on http://localhost:${port}`);
+});
+
+server.on("error", (error) => {
+  if (error.code === "EADDRINUSE") {
+    console.error(`Port ${port} is already in use. Stop the existing process or set PORT to another value.`);
+    process.exit(1);
+  }
+
+  console.error("Server startup error:", error.message);
+  process.exit(1);
 });
