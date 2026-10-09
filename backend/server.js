@@ -13,18 +13,27 @@ if (!process.env.MONGODB_URI && !process.env.JWT_SECRET) {
 
 const app = express();
 const port = Number(process.env.PORT || 8011);
-const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:4173,http://localhost:5173,http://localhost:3000").split(",").map((origin) => origin.trim()).filter(Boolean);
+const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:4173,http://localhost:5173,http://localhost:3000,http://127.0.0.1:4173,http://127.0.0.1:5173").split(",").map((origin) => origin.trim()).filter(Boolean);
+
+const isAllowedOrigin = (origin) => {
+  if (!origin) return true;
+  if (allowedOrigins.includes(origin)) return true;
+
+  return /(^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$)|((\.vercel\.app|\.netlify\.app|\.render\.com)$)|green-guard/i.test(origin);
+};
 
 app.use(
   cors({
     origin: (origin, callback) => {
-      if (!origin || allowedOrigins.includes(origin) || origin.endsWith(".netlify.app")) {
+      if (isAllowedOrigin(origin)) {
         callback(null, true);
         return;
       }
       callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
+    methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
   })
 );
 app.use(express.json());
