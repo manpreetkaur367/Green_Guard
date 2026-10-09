@@ -12,7 +12,7 @@ if (!process.env.MONGODB_URI && !process.env.JWT_SECRET) {
 }
 
 const app = express();
-const port = process.env.PORT || 8004;
+const port = Number(process.env.PORT || 8011);
 const allowedOrigins = (process.env.CORS_ORIGIN || "http://localhost:4173,http://localhost:5173,http://localhost:3000").split(",").map((origin) => origin.trim()).filter(Boolean);
 
 app.use(
@@ -56,16 +56,20 @@ app.use((err, req, res, next) => {
   });
 });
 
-const server = app.listen(port, () => {
-  console.log(`GreenGuard server running on http://localhost:${port}`);
-});
+const startServer = () => {
+  const server = app.listen(port, "0.0.0.0", () => {
+    console.log(`GreenGuard server running on http://localhost:${port}`);
+  });
 
-server.on("error", (error) => {
-  if (error.code === "EADDRINUSE") {
-    console.error(`Port ${port} is already in use. Stop the existing process or set PORT to another value.`);
+  server.on("error", (error) => {
+    if (error.code === "EADDRINUSE") {
+      console.error(`Port ${port} is already in use. Stop the existing process or set PORT to another value.`);
+      process.exit(1);
+    }
+
+    console.error("Server startup error:", error.message);
     process.exit(1);
-  }
+  });
+};
 
-  console.error("Server startup error:", error.message);
-  process.exit(1);
-});
+startServer();
